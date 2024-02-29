@@ -15,7 +15,7 @@ var formSubmitHandler = function (event) {
     repoContainerEl.textContent = '';
     nameInputEl.value = '';
   } else {
-    alert('Please enter a GitHub username');
+    alert('Please enter a valid city');
   }
 };
 

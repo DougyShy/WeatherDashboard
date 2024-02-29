@@ -13,8 +13,8 @@
 
 <body class="flex-column min-100-vh">
   <header class="hero">
-    <h1 class="app-title"><i class="fab fa-github"></i> Git it Done!</h1>
-    <p>Search for a GitHub user or click on a language to see a list of repositories and how many open issues they have!
+    <h1 class="app-title"><i class="fa fa-thermometer-half"></i> Weather Dashboard</h1>
+     <p>Search for a city or choose from the most popular and see its current temperature as well as a five(5) day forecast for that location!
     </p>
   </header>
 
@@ -23,20 +23,27 @@
     <div class="col-12 col-md-4">
 
       <div class="card">
-        <h3 class="card-header text-uppercase">Search By User</h3>
+        <h3 class="card-header text-uppercase">Search for a City:</h3>
         <form id="user-form" class="card-body">
-          <label class="form-label" for="username">Username</label>
+          <label class="form-label" for="username">City</label>
           <input name="username" id="username" type="text" autofocus="true" class="form-input" />
-          <button type="submit" class="btn">Get User</button>
+          <button type="submit" class="btn">Get City Weather</button>
         </form>
       </div>
 
       <div class="card">
-        <h3 class="card-header text-uppercase">Search By Topic</h3>
+        <h3 class="card-header text-uppercase">Top Searched Cities</h3>
         <div id="language-buttons" class="card-body">
-          <button data-language="javascript" class="btn">JavaScript</button>
-          <button data-language="html" class="btn">HTML</button>
-          <button data-language="css" class="btn">CSS</button>
+          <button data-language="atlanta" class="btn">Atlanta</button>
+          <button data-language="denver" class="btn">Denver</button>
+          <button data-language="seattle" class="btn">Seattle</button>
+          <button data-language="sanfrancisco" class="btn">San Francisco</button>
+          <button data-language="orlando" class="btn">Orlando</button>
+          <button data-language="newyork" class="btn">New York</button>
+          <button data-language="chicago" class="btn">Chicago</button>
+          <button data-language="austin" class="btn">Austin</button>
+          <button data-language="sanantonio" class="btn">San Antonio</button>
+          <button data-language="miami" class="btn">Miami</button>
         </div>
       </div>
     </div>

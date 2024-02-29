@@ -96,10 +96,12 @@ p {
   padding: 3% 4%;
   background-color: var(--dark);
   color: var(--primary);
+  text-align: center;
 }
 
 .hero p {
-  max-width: 75%;
+  max-width: 100%;
+  text-align: center;
 }
 
 .app-title {
