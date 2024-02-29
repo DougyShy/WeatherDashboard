@@ -1,16 +1,16 @@
 var userFormEl = document.querySelector('#user-form');
 var languageButtonsEl = document.querySelector('#language-buttons');
-var nameInputEl = document.querySelector('#username');
-var repoContainerEl = document.querySelector('#repos-container');
+var cityInputEl = document.querySelector('#cityname');
+var currentContainerEl = document.querySelector('#current-day');
 var repoSearchTerm = document.querySelector('#repo-search-term');
 
 var formSubmitHandler = function (event) {
   event.preventDefault();
 
-  var username = nameInputEl.value.trim();
+  var cityname = cityInputEl.value.trim();
 
-  if (username) {
-    getUserRepos(username);
+  if (cityname) {
+    getCityDayWeather(cityname);
 
     repoContainerEl.textContent = '';
     nameInputEl.value = '';
@@ -29,7 +29,7 @@ var buttonClickHandler = function (event) {
   }
 };
 
-var getUserRepos = function (user) {
+var getCityDayWeather = function (user) {
   var apiUrl = 'https://api.github.com/users/' + user + '/repos';
 
   fetch(apiUrl)
