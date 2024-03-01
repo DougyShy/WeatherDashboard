@@ -4,6 +4,9 @@ var cityInputEl = document.querySelector('#cityname');
 var forecastContainerEl = document.querySelector('#forecast-container');
 var citySearchTerm = document.querySelector('#city-search-term');
 
+var longitude = 0;
+var latitude = 0;
+
 var formSubmitHandler = function (event) {
   event.preventDefault();
 
@@ -20,25 +23,64 @@ var formSubmitHandler = function (event) {
 };
 
 var buttonClickHandler = function (event) {
-  var language = event.target.getAttribute('data-city');
+  var city = event.target.getAttribute('data-city');
 
-  if (language) {
-    getFeaturedRepos(language);
+  if (city) {
+    getCityWeather(city);
 
     forecastContainerEl.textContent = '';
   }
 };
 
-var getCityForecast = function (user) {
-  var apiUrl = 'https://api.github.com/users/' + user + '/repos';
+function setLonLat(data) {
+  console.log("DATA:");
+  longitude = data[0];
+  latitude = data[1];
+  console.log(longitude);
+  console.log(latitude);
+}
+
+function getCityLonLat(city) {
+  var geoApiUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=' + city + '&limit=5&appid=260e9b6795e2166dad8db2bb1059d931';
+  /*let longitude = 0;
+  let latitude = 0;*/
+
+  fetch(geoApiUrl)
+    .then(function (response) {
+      if (response.ok) {
+        response.json().then(function (data) {
+          console.log("RETURN INFO HERE");
+          /*longitude = data[0].lon;
+          console.log(longitude);
+          latitude = data[0].lat;
+          console.log(latitude);*/
+          setLonLat([data[0].lon, data[0].lat]);
+        });
+      }
+    })
+  console.log("LKSJFKL:JSD:KLFJSD:KLFJSD:KLFJ");
+  console.log(longitude);
+  return 1111;
+  
+}
+
+var getCityForecast = function (city) {
+  var apiUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=' + city + '&limit=5&appid=260e9b6795e2166dad8db2bb1059d931';
+  
+  var coords = "BILLY";
+  coords = getCityLonLat(city);
+
+  console.log("SHORT LONG LAT HERE?")
+  console.log(longitude);
+  console.log("LONG LAT HERE?");
 
   fetch(apiUrl)
     .then(function (response) {
       if (response.ok) {
-        console.log(response);
+        console.log("HERE");
         response.json().then(function (data) {
           console.log(data);
-          displayRepos(data, user);
+          //displayRepos(data, user);
         });
       } else {
         alert('Error: ' + response.statusText);
@@ -49,7 +91,7 @@ var getCityForecast = function (user) {
     });
 };
 
-var getFeaturedRepos = function (language) {
+var getCityWeather = function (city) {
   var apiUrl = 'https://api.github.com/search/repositories?q=' + language + '+is:featured&sort=help-wanted-issues';
 
   fetch(apiUrl).then(function (response) {
