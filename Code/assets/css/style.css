@@ -100,7 +100,8 @@ p {
 }
 
 .hero p {
-  max-width: 75%;
+  max-width: 100%;
+
 }
 
 .app-title {
