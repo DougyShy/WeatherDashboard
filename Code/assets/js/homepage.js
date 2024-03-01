@@ -1,35 +1,35 @@
 var userFormEl = document.querySelector('#user-form');
-var languageButtonsEl = document.querySelector('#language-buttons');
+var historyButtonsEl = document.querySelector('#history-buttons');
 var cityInputEl = document.querySelector('#cityname');
-var currentContainerEl = document.querySelector('#current-day');
-var repoSearchTerm = document.querySelector('#repo-search-term');
+var forecastContainerEl = document.querySelector('#forecast-container');
+var citySearchTerm = document.querySelector('#city-search-term');
 
 var formSubmitHandler = function (event) {
   event.preventDefault();
 
   var cityname = cityInputEl.value.trim();
-
+  console.log("City entered");
   if (cityname) {
-    getCityDayWeather(cityname);
+    getCityForecast(cityname);
 
-    repoContainerEl.textContent = '';
-    nameInputEl.value = '';
+    forecastContainerEl.textContent = '';
+    cityInputEl.value = '';
   } else {
-    alert('Please enter a valid city');
+    alert('Please enter a valid city name.');
   }
 };
 
 var buttonClickHandler = function (event) {
-  var language = event.target.getAttribute('data-language');
+  var language = event.target.getAttribute('data-city');
 
   if (language) {
     getFeaturedRepos(language);
 
-    repoContainerEl.textContent = '';
+    forecastContainerEl.textContent = '';
   }
 };
 
-var getCityDayWeather = function (user) {
+var getCityForecast = function (user) {
   var apiUrl = 'https://api.github.com/users/' + user + '/repos';
 
   fetch(apiUrl)
@@ -65,11 +65,11 @@ var getFeaturedRepos = function (language) {
 
 var displayRepos = function (repos, searchTerm) {
   if (repos.length === 0) {
-    repoContainerEl.textContent = 'No repositories found.';
+    forecastContainerEl.textContent = 'No repositories found.';
     return;
   }
 
-  repoSearchTerm.textContent = searchTerm;
+  citySearchTerm.textContent = searchTerm;
 
   for (var i = 0; i < repos.length; i++) {
     var repoName = repos[i].owner.login + '/' + repos[i].name;
@@ -95,9 +95,9 @@ var displayRepos = function (repos, searchTerm) {
 
     repoEl.appendChild(statusEl);
 
-    repoContainerEl.appendChild(repoEl);
+    forecastContainerEl.appendChild(repoEl);
   }
 };
 
 userFormEl.addEventListener('submit', formSubmitHandler);
-languageButtonsEl.addEventListener('click', buttonClickHandler);
+historyButtonsEl.addEventListener('click', buttonClickHandler);
