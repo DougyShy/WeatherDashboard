@@ -7,11 +7,14 @@ var citySearchTerm = document.querySelector('#city-search-term');
 var longitude = 0;
 var latitude = 0;
 
+coords = [];
+
+cityInputEl.value = "San Antonio";
+
 var formSubmitHandler = function (event) {
   event.preventDefault();
 
   var cityname = cityInputEl.value.trim();
-  console.log("City entered");
   if (cityname) {
     getCityForecast(cityname);
 
@@ -40,39 +43,31 @@ function setLonLat(data) {
   console.log(latitude);
 }
 
-function getCityLonLat(city) {
-  var geoApiUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=' + city + '&limit=5&appid=260e9b6795e2166dad8db2bb1059d931';
-  /*let longitude = 0;
-  let latitude = 0;*/
+async function setCityLonLat(city) {
+  var geoApiUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=' + city + '&limit=3&appid=260e9b6795e2166dad8db2bb1059d931';
 
   fetch(geoApiUrl)
     .then(function (response) {
       if (response.ok) {
         response.json().then(function (data) {
-          console.log("RETURN INFO HERE");
-          /*longitude = data[0].lon;
-          console.log(longitude);
+          longitude = data[0].lon;
           latitude = data[0].lat;
-          console.log(latitude);*/
-          setLonLat([data[0].lon, data[0].lat]);
         });
       }
     })
-  console.log("LKSJFKL:JSD:KLFJSD:KLFJSD:KLFJ");
-  console.log(longitude);
-  return 1111;
-  
+    const response = await fetch(geoApiUrl);
+  return ;  
 }
 
-var getCityForecast = function (city) {
-  var apiUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=' + city + '&limit=5&appid=260e9b6795e2166dad8db2bb1059d931';
+const getCityForecast = async function (city) {
+  var apiUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=' + city + '&limit=3&appid=260e9b6795e2166dad8db2bb1059d931';
   
-  var coords = "BILLY";
-  coords = getCityLonLat(city);
+  await setCityLonLat(city);
+  /*console.log("AFTER AWAIT: " + longitude); 
 
   console.log("SHORT LONG LAT HERE?")
   console.log(longitude);
-  console.log("LONG LAT HERE?");
+  console.log("LONG LAT HERE?");*/
 
   fetch(apiUrl)
     .then(function (response) {
