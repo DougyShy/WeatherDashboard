@@ -3,6 +3,7 @@ var historyButtonsEl = document.querySelector('#history-buttons');
 var cityInputEl = document.querySelector('#cityname');
 var forecastContainerEl = document.querySelector('#forecast-container');
 var citySearchTerm = document.querySelector('#city-search-term');
+var app_id = '260e9b6795e2166dad8db2bb1059d931';
 
 var longitude = 0;
 var latitude = 0;
@@ -19,9 +20,9 @@ var formSubmitHandler = function (event) {
     getCityForecast(cityname);
 
     forecastContainerEl.textContent = '';
-    cityInputEl.value = '';
+    //cityInputEl.value = '';
   } else {
-    alert('Please enter a valid city name.');
+    alert('Please enter a city name.');
   }
 };
 
@@ -35,45 +36,33 @@ var buttonClickHandler = function (event) {
   }
 };
 
-function setLonLat(data) {
-  console.log("DATA:");
-  longitude = data[0];
-  latitude = data[1];
-  console.log(longitude);
-  console.log(latitude);
-}
-
 async function setCityLonLat(city) {
-  var geoApiUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=' + city + '&limit=3&appid=260e9b6795e2166dad8db2bb1059d931';
+   var geoApiUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=' + city + '&limit=3&appid=' + app_id;
 
-  fetch(geoApiUrl)
-    .then(function (response) {
-      if (response.ok) {
-        response.json().then(function (data) {
-          longitude = data[0].lon;
-          latitude = data[0].lat;
-        });
-      }
-    })
-    const response = await fetch(geoApiUrl);
-  return ;  
+  response = await fetch(geoApiUrl);
+  data = await response.json();
+  longitude = data[0].lon;
+  latitude = data[0].lat;                
 }
 
 const getCityForecast = async function (city) {
-  var apiUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=' + city + '&limit=3&appid=260e9b6795e2166dad8db2bb1059d931';
-  
+    
   await setCityLonLat(city);
-  /*console.log("AFTER AWAIT: " + longitude); 
 
-  console.log("SHORT LONG LAT HERE?")
+  //let apiUrl = 'http://api.openweathermap.org/data/2.5/forecast?lat=' + latitude + '&lon=' + longitude + '&cnt=5&appid=' + app_id;
   console.log(longitude);
-  console.log("LONG LAT HERE?");*/
+  console.log(latitude);
 
-  fetch(apiUrl)
+  let currentDayApiUrl = ('http://api.openweathermap.org/data/2.5/weather?lat=' + latitude + '&lon=' + longitude + '&appid=' + app_id);
+  
+  //let currentDayApiUrl = 'https://api.openweathermap.org/data/2.5/weather?lat=44.34&lon=10.99&appid=' + app_id;
+
+  await fetch(currentDayApiUrl)
     .then(function (response) {
       if (response.ok) {
         console.log("HERE");
         response.json().then(function (data) {
+          console.log(longitude);
           console.log(data);
           //displayRepos(data, user);
         });
