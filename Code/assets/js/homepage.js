@@ -2,7 +2,8 @@ var userFormEl = document.querySelector('#user-form');
 var historyButtonsEl = document.querySelector('#history-buttons');
 var cityInputEl = document.querySelector('#cityname');
 var forecastContainerEl = document.querySelector('#forecast-container');
-var citySearchTerm = document.querySelector('#city-search-term');
+var citySearchTerm = document.querySelector('#current-weather');
+
 var app_id = '260e9b6795e2166dad8db2bb1059d931';
 
 var longitude = 0;
@@ -49,22 +50,15 @@ const getCityForecast = async function (city) {
     
   await setCityLonLat(city);
 
-  //let apiUrl = 'http://api.openweathermap.org/data/2.5/forecast?lat=' + latitude + '&lon=' + longitude + '&cnt=5&appid=' + app_id;
-  console.log(longitude);
-  console.log(latitude);
+  let currentDayApiUrl = ('http://api.openweathermap.org/data/2.5/weather?lat=' + latitude + '&lon=' + longitude + '&units=imperial&appid=' + app_id);
 
-  let currentDayApiUrl = ('http://api.openweathermap.org/data/2.5/weather?lat=' + latitude + '&lon=' + longitude + '&appid=' + app_id);
-  
-  //let currentDayApiUrl = 'https://api.openweathermap.org/data/2.5/weather?lat=44.34&lon=10.99&appid=' + app_id;
-
-  await fetch(currentDayApiUrl)
+  fetch(currentDayApiUrl)
     .then(function (response) {
       if (response.ok) {
         console.log("HERE");
         response.json().then(function (data) {
-          console.log(longitude);
-          console.log(data);
-          //displayRepos(data, user);
+          console.log(data['wind'].speed);
+          displayCurrentWeather(data);
         });
       } else {
         alert('Error: ' + response.statusText);
@@ -81,7 +75,7 @@ var getCityWeather = function (city) {
   fetch(apiUrl).then(function (response) {
     if (response.ok) {
       response.json().then(function (data) {
-        displayRepos(data.items, language);
+        displayCurrentWeather(data.items, language);
       });
     } else {
       alert('Error: ' + response.statusText);
@@ -89,15 +83,20 @@ var getCityWeather = function (city) {
   });
 };
 
-var displayRepos = function (repos, searchTerm) {
-  if (repos.length === 0) {
-    forecastContainerEl.textContent = 'No repositories found.';
-    return;
-  }
+var displayCurrentWeather = function (data) {
+  console.log("DATA: ");
+  console.log (data);
 
-  citySearchTerm.textContent = searchTerm;
+  var trial = document.querySelector('.currentDay');
+  trial.textContent = 'BILLY';
 
-  for (var i = 0; i < repos.length; i++) {
+  citySearchTerm.textContent = data['name'];
+
+  trial.value = '';
+
+
+
+  /*for (var i = 0; i < repos.length; i++) {
     var repoName = repos[i].owner.login + '/' + repos[i].name;
 
     var repoEl = document.createElement('a');
@@ -122,7 +121,7 @@ var displayRepos = function (repos, searchTerm) {
     repoEl.appendChild(statusEl);
 
     forecastContainerEl.appendChild(repoEl);
-  }
+  }*/
 };
 
 userFormEl.addEventListener('submit', formSubmitHandler);
