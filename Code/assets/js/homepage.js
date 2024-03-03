@@ -52,14 +52,13 @@ const getCityForecast = async function (city) {
   await setCityLonLat(city);
 
   let currentDayApiUrl = 'http://api.openweathermap.org/data/2.5/weather?lat=' + latitude + '&lon=' + longitude + '&units=imperial&appid=' + app_id;
-  let forecastApiUrl = 'http://api.openweathermap.org/data/2.5/forecast?lat=' + latitude + '&lon=' + longitude + '&appid=' + app_id;
+  let forecastApiUrl = 'http://api.openweathermap.org/data/2.5/forecast?lat=' + latitude + '&lon=' + longitude + '&units=imperial&appid=' + app_id;
 
   fetch(currentDayApiUrl)
     .then(function (response) {
       if (response.ok) {
         console.log("HERE");
         response.json().then(function (data) {
-          console.log(data['wind'].speed);
           displayCurrentWeather(data);
         });
       } else {
@@ -90,9 +89,18 @@ const getCityForecast = async function (city) {
 var displayFiveDay = function (data) {
   console.log("DATA: ");
   console.log (data);
-  for (i=0; i<data.cnt; i++) {
-    console.log(data['list'][i].dt);
+  let tomorrow = dayjs().add(1, 'day');
+
+
+  //console.log(tomorrow.format("MM:DD:YYYY"));
+  for (i=7; i<=39; i = i + 8) {
+    let futureDate = dayjs.unix(data['list'][i]['dt']);
+    let futureTemp = data['list'][i]['main']['temp'];
+    console.log(futureDate.format("MM/DD/YYYY"));
+    console.log(futureTemp);
+
   }
+
 }
 
 var displayCurrentWeather = function (data) {
