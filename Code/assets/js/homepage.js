@@ -2,16 +2,16 @@ var userFormEl = document.querySelector('#user-form');
 var historyButtonsEl = document.querySelector('#history-buttons');
 var cityInputEl = document.querySelector('#cityname');
 var forecastContainerEl = document.querySelector('#forecast-container');
-var citySearchTerm = document.querySelector('#current-weather');
+var currentContainerEl = document.querySelector('#current-container');
+var currentWeatherContainer = document.querySelector('.currentDay')
 
 var app_id = '260e9b6795e2166dad8db2bb1059d931';
 
 var longitude = 0;
 var latitude = 0;
 
-coords = [];
-
 cityInputEl.value = "San Antonio";
+var currentDate = dayjs();
 
 var formSubmitHandler = function (event) {
   event.preventDefault();
@@ -20,7 +20,6 @@ var formSubmitHandler = function (event) {
   if (cityname) {
     getCityForecast(cityname);
 
-    forecastContainerEl.textContent = '';
     //cityInputEl.value = '';
   } else {
     alert('Please enter a city name.');
@@ -41,9 +40,11 @@ async function setCityLonLat(city) {
    var geoApiUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=' + city + '&limit=3&appid=' + app_id;
 
   response = await fetch(geoApiUrl);
-  data = await response.json();
-  longitude = data[0].lon;
-  latitude = data[0].lat;                
+  if (response.ok) {
+    data = await response.json();
+    longitude = data[0].lon;
+    latitude = data[0].lat;
+  }                
 }
 
 const getCityForecast = async function (city) {
@@ -69,7 +70,7 @@ const getCityForecast = async function (city) {
     });
 };
 
-var getCityWeather = function (city) {
+/*var getCityWeather = function (city) {
   var apiUrl = 'https://api.github.com/search/repositories?q=' + language + '+is:featured&sort=help-wanted-issues';
 
   fetch(apiUrl).then(function (response) {
@@ -81,21 +82,20 @@ var getCityWeather = function (city) {
       alert('Error: ' + response.statusText);
     }
   });
-};
+};*/
 
 var displayCurrentWeather = function (data) {
   console.log("DATA: ");
   console.log (data);
 
-  var trial = document.querySelector('.currentDay');
-  trial.textContent = 'BILLY';
+  const weatherIconURL = 'https://openweathermap.org/img/wn/' + data['weather'][0]['icon'] + '@2x.png'
+  
 
-  citySearchTerm.textContent = data['name'];
+  console.log(weatherIconURL);
 
-  trial.value = '';
-
-
-
+  currentContainerEl.innerHTML = "<h1>" + data['name'] + " (" + dayjs().format("M/D/YYYY") + ")" + "<img class='weatherIcon' src='" + weatherIconURL + "'/></h1>" +
+                                 "<h2>- Temp: " + data['main']['temp'] + "°&nbspF</h2><h2>- Wind: &nbsp" + data['wind'].speed + "&nbsp MPH</h2><h2>- Humidity: &nbsp" + data['main']['humidity'] + "&nbsp%";
+  
   /*for (var i = 0; i < repos.length; i++) {
     var repoName = repos[i].owner.login + '/' + repos[i].name;
 

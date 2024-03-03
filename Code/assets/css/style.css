@@ -11,6 +11,13 @@
   box-sizing: border-box;
 }
 
+.weatherIcon {
+  display: flex-row;
+  height: 30px;
+  width: 30px;
+  margin-left: 10px;
+}
+
 body {
   background-color: var(--primary);
   margin: 0;
@@ -22,8 +29,17 @@ body {
 }
 
 .current-weather {
+  display: flex-column;
   border: 1px black solid;
   padding: 10px;
+}
+
+.forecast-weather {
+  display: flex;
+  justify-content: space-between;
+  border: 1px black solid;
+  padding: 10px;
+  margin-top: 10px;;
 }
 
 h1,
