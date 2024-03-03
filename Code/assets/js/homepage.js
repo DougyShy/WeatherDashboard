@@ -51,7 +51,8 @@ const getCityForecast = async function (city) {
     
   await setCityLonLat(city);
 
-  let currentDayApiUrl = ('http://api.openweathermap.org/data/2.5/weather?lat=' + latitude + '&lon=' + longitude + '&units=imperial&appid=' + app_id);
+  let currentDayApiUrl = 'http://api.openweathermap.org/data/2.5/weather?lat=' + latitude + '&lon=' + longitude + '&units=imperial&appid=' + app_id;
+  let forecastApiUrl = 'http://api.openweathermap.org/data/2.5/forecast?lat=' + latitude + '&lon=' + longitude + '&appid=' + app_id;
 
   fetch(currentDayApiUrl)
     .then(function (response) {
@@ -68,30 +69,37 @@ const getCityForecast = async function (city) {
     .catch(function (error) {
       alert('Unable to connect to GitHub');
     });
-};
 
-/*var getCityWeather = function (city) {
-  var apiUrl = 'https://api.github.com/search/repositories?q=' + language + '+is:featured&sort=help-wanted-issues';
-
-  fetch(apiUrl).then(function (response) {
+  fetch(forecastApiUrl)
+  .then(function (response) {
     if (response.ok) {
+      console.log("HERE FOR FORECAST");
       response.json().then(function (data) {
-        displayCurrentWeather(data.items, language);
+        //console.log(data['wind'].speed);
+        displayFiveDay(data);
       });
     } else {
       alert('Error: ' + response.statusText);
     }
+  })
+  .catch(function (error) {
+    alert('Unable to connect to GitHub');
   });
-};*/
+};
+
+var displayFiveDay = function (data) {
+  console.log("DATA: ");
+  console.log (data);
+  for (i=0; i<data.cnt; i++) {
+    console.log(data['list'][i].dt);
+  }
+}
 
 var displayCurrentWeather = function (data) {
   console.log("DATA: ");
   console.log (data);
 
-  const weatherIconURL = 'https://openweathermap.org/img/wn/' + data['weather'][0]['icon'] + '@2x.png'
-  
-
-  console.log(weatherIconURL);
+  const weatherIconURL = 'https://openweathermap.org/img/wn/' + data['weather'][0]['icon'] + '@2x.png'  
 
   currentContainerEl.innerHTML = "<h1>" + data['name'] + " (" + dayjs().format("M/D/YYYY") + ")" + "<img class='weatherIcon' src='" + weatherIconURL + "'/></h1>" +
                                  "<h2>- Temp: " + data['main']['temp'] + "°&nbspF</h2><h2>- Wind: &nbsp" + data['wind'].speed + "&nbsp MPH</h2><h2>- Humidity: &nbsp" + data['main']['humidity'] + "&nbsp%";
