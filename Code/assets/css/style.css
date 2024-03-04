@@ -11,6 +11,14 @@
   box-sizing: border-box;
 }
 
+ul {
+  list-style-type: none;
+  text-align: left;
+  background-color: blue;
+  padding: 10px 0px 10px 10px;
+  width: 20%;
+}
+
 .weatherIcon {
   display: flex-row;
   height: 30px;
@@ -35,11 +43,10 @@ body {
 }
 
 .forecast-weather {
+  color: white;
   display: flex;
   justify-content: space-between;
-  border: 1px black solid;
-  padding: 10px;
-  margin-top: 10px;;
+  align-content: left;
 }
 
 h1,

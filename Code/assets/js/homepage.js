@@ -97,8 +97,7 @@ var displayFiveDay = function (data) {
     let futureTemp = data['list'][i]['main']['temp'];
     let futureWind = data['list'][i]['wind']['speed'];
     let futureHumidity = data['list'][i]['main']['humidity'];
-    //console.log(futureDate.format("MM/DD/YYYY"));
-    //console.log(futureTemp);
+
     var forecastEl = document.createElement("ul");
     var forecastDateEl = document.createElement("li");
     var forecastTempEl = document.createElement("li");
@@ -106,9 +105,9 @@ var displayFiveDay = function (data) {
     var forecastHumidityEl = document.createElement("li");
 
     forecastDateEl.textContent = futureDate.format("M/D/YYYY");
-    forecastTempEl.textContent = futureTemp;
-    forecastWindEl.textContent = futureWind;
-    forecastHumidityEl.textContent = futureHumidity;
+    forecastTempEl.textContent = "Temp: " + futureTemp + " °F";
+    forecastWindEl.textContent = "Wind: " + futureWind + " MPH";
+    forecastHumidityEl.textContent = "Humidity: " + futureHumidity + " %";
 
     forecastEl.appendChild(forecastDateEl);
     forecastEl.appendChild(forecastTempEl);
