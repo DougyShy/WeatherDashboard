@@ -1,9 +1,8 @@
 var userFormEl = document.querySelector('#user-form');
 var historyButtonsEl = document.querySelector('#history-buttons');
 var cityInputEl = document.querySelector('#cityname');
-var forecastContainerEl = document.querySelector('#forecast-container');
 var currentContainerEl = document.querySelector('#current-container');
-var currentWeatherContainer = document.querySelector('.currentDay')
+var forecastContainerEl = document.querySelector('#forecast-container');
 
 var app_id = '260e9b6795e2166dad8db2bb1059d931';
 
@@ -96,9 +95,17 @@ var displayFiveDay = function (data) {
   for (i=7; i<=39; i = i + 8) {
     let futureDate = dayjs.unix(data['list'][i]['dt']);
     let futureTemp = data['list'][i]['main']['temp'];
-    console.log(futureDate.format("MM/DD/YYYY"));
-    console.log(futureTemp);
+    let futureWind = data['list'][i]['wind']['speed'];
+    let futureHumidity = data['list'][i]['main']['humidity'];
+    //console.log(futureDate.format("MM/DD/YYYY"));
+    //console.log(futureTemp);
+    var forecastEl = document.createElement("ul");
+    var forecastDateEl = document.createElement("li");
 
+    forecastDateEl.textContent = futureDate.format("M/D/YYYY");
+
+    forecastEl.appendChild(forecastDateEl);
+    forecastContainerEl.appendChild(forecastEl);
   }
 
 }
