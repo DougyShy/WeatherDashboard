@@ -15,11 +15,12 @@ var currentDate = dayjs();
 var formSubmitHandler = function (event) {
   event.preventDefault();
 
+  forecastContainerEl.replaceChildren();
+
   var cityname = cityInputEl.value.trim();
   if (cityname) {
     getCityForecast(cityname);
 
-    //cityInputEl.value = '';
   } else {
     alert('Please enter a city name.');
   }
@@ -94,22 +95,28 @@ var displayFiveDay = function (data) {
   //console.log(tomorrow.format("MM:DD:YYYY"));
   for (i=7; i<=39; i = i + 8) {
     let futureDate = dayjs.unix(data['list'][i]['dt']);
+    let futureIconURL = 'https://openweathermap.org/img/wn/' + data['list'][i]['weather'][0]['icon'] + '@2x.png'
     let futureTemp = data['list'][i]['main']['temp'];
     let futureWind = data['list'][i]['wind']['speed'];
     let futureHumidity = data['list'][i]['main']['humidity'];
+    
 
     var forecastEl = document.createElement("ul");
     var forecastDateEl = document.createElement("li");
+    var forecastIconEl = document.createElement("img");
     var forecastTempEl = document.createElement("li");
     var forecastWindEl = document.createElement("li");
     var forecastHumidityEl = document.createElement("li");
 
     forecastDateEl.textContent = futureDate.format("M/D/YYYY");
+    forecastIconEl.setAttribute("src", futureIconURL);
+    forecastIconEl.setAttribute("class", "weatherIcon");
     forecastTempEl.textContent = "Temp: " + futureTemp + " °F";
     forecastWindEl.textContent = "Wind: " + futureWind + " MPH";
     forecastHumidityEl.textContent = "Humidity: " + futureHumidity + " %";
 
     forecastEl.appendChild(forecastDateEl);
+    forecastEl.appendChild(forecastIconEl);
     forecastEl.appendChild(forecastTempEl);
     forecastEl.appendChild(forecastWindEl);
     forecastEl.appendChild(forecastHumidityEl);
@@ -118,6 +125,7 @@ var displayFiveDay = function (data) {
 
 }
 
+// since only on day is being shown here I decided to experiment with innerHTML
 var displayCurrentWeather = function (data) {
   console.log("DATA: ");
   console.log (data);
@@ -127,6 +135,38 @@ var displayCurrentWeather = function (data) {
   currentContainerEl.innerHTML = "<h1>" + data['name'] + " (" + dayjs().format("M/D/YYYY") + ")" + "<img class='weatherIcon' src='" + weatherIconURL + "'/></h1>" +
                                  "<h2>- Temp: " + data['main']['temp'] + "°&nbspF</h2><h2>- Wind: &nbsp" + data['wind'].speed + "&nbsp MPH</h2><h2>- Humidity: &nbsp" + data['main']['humidity'] + "&nbsp%";
   
+};
+
+userFormEl.addEventListener('submit', formSubmitHandler);
+historyButtonsEl.addEventListener('click', buttonClickHandler);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   /*for (var i = 0; i < repos.length; i++) {
     var repoName = repos[i].owner.login + '/' + repos[i].name;
 
@@ -153,7 +193,3 @@ var displayCurrentWeather = function (data) {
 
     forecastContainerEl.appendChild(repoEl);
   }*/
-};
-
-userFormEl.addEventListener('submit', formSubmitHandler);
-historyButtonsEl.addEventListener('click', buttonClickHandler);
