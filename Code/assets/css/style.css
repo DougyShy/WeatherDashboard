@@ -14,7 +14,7 @@
 ul {
   list-style-type: none;
   text-align: left;
-  background-color: blue;
+  background-color: var(--dark);
   padding: 10px 0px 10px 10px;
   width: 20%;
 }
@@ -38,7 +38,7 @@ body {
 
 .current-weather {
   display: flex-column;
-  border: 1px black solid;
+  /*border: 1px black solid;*/
   padding: 10px;
 }
 

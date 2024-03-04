@@ -3,14 +3,17 @@ var historyButtonsEl = document.querySelector('#history-buttons');
 var cityInputEl = document.querySelector('#cityname');
 var currentContainerEl = document.querySelector('#current-container');
 var forecastContainerEl = document.querySelector('#forecast-container');
+var historyContainerEl = document.querySelector('#history-buttons');
 
 var app_id = '260e9b6795e2166dad8db2bb1059d931';
 
 var longitude = 0;
 var latitude = 0;
 
-cityInputEl.value = "San Antonio";
 var currentDate = dayjs();
+
+//var citySearchHistory = ["Atlanta", "Denver", "Seattle", "New York", "Keystone"];
+var citySearchHistory = JSON.parse(localStorage.getItem("history"));
 
 var formSubmitHandler = function (event) {
   event.preventDefault();
@@ -28,23 +31,68 @@ var formSubmitHandler = function (event) {
 
 var buttonClickHandler = function (event) {
   var city = event.target.getAttribute('data-city');
+  forecastContainerEl.replaceChildren();
 
   if (city) {
-    getCityWeather(city);
-
-    forecastContainerEl.textContent = '';
+    getCityForecast(city);
   }
 };
 
+const loadCityHistory = function (cityHistory) {
+  
+  cityHistory[0] ? cityInputEl.value = cityHistory[0] : cityInputEl.value = "San Antonio";
+  historyContainerEl.replaceChildren();
+  
+  for(i = 0; i < cityHistory.length; i++) {
+    let cityHistoryEl = document.createElement("button");
+    cityHistoryEl.setAttribute("data-city", cityHistory[i]);
+    cityHistoryEl.setAttribute("class", "btn");
+    cityHistoryEl.textContent = cityHistory[i];
+    historyButtonsEl.appendChild(cityHistoryEl);
+  }
+}
+
+/*const loadCityHistory = function () {
+  let cityHistory = localStorage.getItem("history");
+  console.log(cityHistory);
+}*/
+
 async function setCityLonLat(city) {
-   var geoApiUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=' + city + '&limit=3&appid=' + app_id;
+  console.log(city);
+  var geoApiUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=' + city + '&limit=3&appid=' + app_id;
 
   response = await fetch(geoApiUrl);
+  console.log(response);
   if (response.ok) {
     data = await response.json();
-    longitude = data[0].lon;
-    latitude = data[0].lat;
-  }                
+    console.log(data.length);
+    if(data.length > 0) {
+      
+      longitude = data[0].lon;
+      latitude = data[0].lat;
+      
+      console.log(city);
+      addCityToSearchHistory(city);
+      loadCityHistory(citySearchHistory);
+
+    } else {
+      cityInputEl.value = "";
+      alert('Invalid or unavailable city name request. Please try again.');
+    } 
+  }               
+};
+
+const addCityToSearchHistory = function (city) {
+  if (citySearchHistory.length < 10) {
+    citySearchHistory.unshift(city);
+    console.log("HERE: " + citySearchHistory);
+    console.log(citySearchHistory);
+  } else {
+    citySearchHistory.pop();
+    citySearchHistory.unshift(city);
+  }
+  console.log(citySearchHistory);
+  localStorage.setItem("history", JSON.stringify(citySearchHistory));  
 }
 
 const getCityForecast = async function (city) {
@@ -66,15 +114,13 @@ const getCityForecast = async function (city) {
       }
     })
     .catch(function (error) {
-      alert('Unable to connect to GitHub');
+      alert('Unable to connect to OpenWeather API');
     });
 
   fetch(forecastApiUrl)
   .then(function (response) {
     if (response.ok) {
-      console.log("HERE FOR FORECAST");
       response.json().then(function (data) {
-        //console.log(data['wind'].speed);
         displayFiveDay(data);
       });
     } else {
@@ -82,25 +128,21 @@ const getCityForecast = async function (city) {
     }
   })
   .catch(function (error) {
-    alert('Unable to connect to GitHub');
+    alert('Unable to connect to OpenWeather API');
   });
 };
 
 var displayFiveDay = function (data) {
-  console.log("DATA: ");
-  console.log (data);
-  let tomorrow = dayjs().add(1, 'day');
 
-
-  //console.log(tomorrow.format("MM:DD:YYYY"));
+  // starting at 0 gives current day - will look into later - this works for now
   for (i=7; i<=39; i = i + 8) {
+    
     let futureDate = dayjs.unix(data['list'][i]['dt']);
     let futureIconURL = 'https://openweathermap.org/img/wn/' + data['list'][i]['weather'][0]['icon'] + '@2x.png'
     let futureTemp = data['list'][i]['main']['temp'];
     let futureWind = data['list'][i]['wind']['speed'];
     let futureHumidity = data['list'][i]['main']['humidity'];
     
-
     var forecastEl = document.createElement("ul");
     var forecastDateEl = document.createElement("li");
     var forecastIconEl = document.createElement("img");
@@ -140,7 +182,8 @@ var displayCurrentWeather = function (data) {
 userFormEl.addEventListener('submit', formSubmitHandler);
 historyButtonsEl.addEventListener('click', buttonClickHandler);
 
-
+historyContainerEl.replaceChildren();
+loadCityHistory(citySearchHistory);
 
 
 
