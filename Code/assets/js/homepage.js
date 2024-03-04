@@ -101,10 +101,19 @@ var displayFiveDay = function (data) {
     //console.log(futureTemp);
     var forecastEl = document.createElement("ul");
     var forecastDateEl = document.createElement("li");
+    var forecastTempEl = document.createElement("li");
+    var forecastWindEl = document.createElement("li");
+    var forecastHumidityEl = document.createElement("li");
 
     forecastDateEl.textContent = futureDate.format("M/D/YYYY");
+    forecastTempEl.textContent = futureTemp;
+    forecastWindEl.textContent = futureWind;
+    forecastHumidityEl.textContent = futureHumidity;
 
     forecastEl.appendChild(forecastDateEl);
+    forecastEl.appendChild(forecastTempEl);
+    forecastEl.appendChild(forecastWindEl);
+    forecastEl.appendChild(forecastHumidityEl);
     forecastContainerEl.appendChild(forecastEl);
   }
 
