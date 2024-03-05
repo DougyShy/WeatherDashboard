@@ -50,7 +50,7 @@ This website stores the last 10 searches that the user has submitted
  - This code uses dayjs "https://cdn.jsdelivr.net/npm/dayjs@1.11.3/dayjs.min.js"
 
 Github Repository: https://github.com/DougyShy/WeatherDashboard
-Githup Pages Address: https://dougyshy.github.io/WorkScheduler/
+Githup Pages Address: https://dougyshy.github.io/WeatherDashboard/
 
 ## Contributing
 
