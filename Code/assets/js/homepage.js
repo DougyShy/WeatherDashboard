@@ -66,7 +66,7 @@ const loadCityHistory = function (cityHistory) {
 // Set city location longitude and latitude using additional api - works for major cities but gets weird for smaller or lesser known locals - but.... it's free
 // made async because I was running into coding issues with respect to code being implemented before the fetch finished. This seemed to fix the problem and I learned a little
 async function setCityLonLat(city) {
-  var geoApiUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=' + city + '&limit=3&appid=' + app_id;
+  var geoApiUrl = 'https://api.openweathermap.org/geo/1.0/direct?q=' + city + '&limit=3&appid=' + app_id;
 
   response = await fetch(geoApiUrl);
   if (response.ok) {
