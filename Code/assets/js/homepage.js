@@ -12,8 +12,23 @@ var latitude = 0;
 
 var currentDate = dayjs();
 
-//var citySearchHistory = ["Atlanta", "Denver", "Seattle", "New York", "Keystone"];
-var citySearchHistory = JSON.parse(localStorage.getItem("history"));
+var citySearchHistory = [];
+if (localStorage.getItem("history") === null) {
+  console.log("EMPTY");
+} else {
+  citySearchHistory = JSON.parse(localStorage.getItem("history"));
+}
+//console.log(JSON.parse(localStorage.getItem("history")));
+
+/*if (localStorage.getItem("history") !== null) {
+  console.log("NOT EMPTY");
+  citySearchHistory = JSON.parse(localStorage.getItem("history"));
+  console.log(citySearchHistory);
+} else {
+  console.log("EMPTY")
+  citySearchHistory = [];
+  localStorage.setItem("history", JSON.stringify(citySearchHistory));
+}*/
 
 var formSubmitHandler = function (event) {
   event.preventDefault();
@@ -51,11 +66,6 @@ const loadCityHistory = function (cityHistory) {
     historyButtonsEl.appendChild(cityHistoryEl);
   }
 }
-
-/*const loadCityHistory = function () {
-  let cityHistory = localStorage.getItem("history");
-  console.log(cityHistory);
-}*/
 
 async function setCityLonLat(city) {
   console.log(city);
