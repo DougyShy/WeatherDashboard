@@ -1,3 +1,4 @@
+// Grab necessary document elements
 var userFormEl = document.querySelector('#user-form');
 var historyButtonsEl = document.querySelector('#history-buttons');
 var cityInputEl = document.querySelector('#cityname');
@@ -5,19 +6,24 @@ var currentContainerEl = document.querySelector('#current-container');
 var forecastContainerEl = document.querySelector('#forecast-container');
 var historyContainerEl = document.querySelector('#history-buttons');
 
+// shouldn't store API like this but it's a free one with no CC attached, so....
 var app_id = '260e9b6795e2166dad8db2bb1059d931';
 
+// location of city being queried
 var longitude = 0;
 var latitude = 0;
 
+// today for reference in functions
 var currentDate = dayjs();
 
+// Check to see if user has a search history using local storage if not start one
 var citySearchHistory = [];
 if (localStorage.getItem("history") === null) {
 } else {
   citySearchHistory = JSON.parse(localStorage.getItem("history"));
 }
 
+// Main City Search Button
 var formSubmitHandler = function (event) {
   event.preventDefault();
 
@@ -32,6 +38,7 @@ var formSubmitHandler = function (event) {
   
 };
 
+// History button search 
 var buttonClickHandler = function (event) {
   var city = event.target.getAttribute('data-city');
   forecastContainerEl.replaceChildren();
@@ -41,6 +48,7 @@ var buttonClickHandler = function (event) {
   }
 };
 
+// Load history container 
 const loadCityHistory = function (cityHistory) {
   
   cityHistory[0] ? cityInputEl.value = cityHistory[0] : cityInputEl.value = "";
@@ -55,6 +63,8 @@ const loadCityHistory = function (cityHistory) {
   }
 }
 
+// Set city location longitude and latitude using additional api - works for major cities but gets weird for smaller or lesser known locals - but.... it's free
+// made async because I was running into coding issues with respect to code being implemented before the fetch finished. This seemed to fix the problem and I learned a little
 async function setCityLonLat(city) {
   var geoApiUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=' + city + '&limit=3&appid=' + app_id;
 
@@ -76,6 +86,7 @@ async function setCityLonLat(city) {
   }               
 };
 
+// Add most recent search to local storage search history
 const addCityToSearchHistory = function (city) {
   if (citySearchHistory.length < 10) {
     citySearchHistory.unshift(city);
@@ -87,6 +98,7 @@ const addCityToSearchHistory = function (city) {
   localStorage.setItem("history", JSON.stringify(citySearchHistory));  
 }
 
+// another async function that seems to make the page react better with fetches from this API. This is the more complicated function of grabbing a 5 day forecast and orgainizing the info for the user
 const getCityForecast = async function (city) {
     
   await setCityLonLat(city);
@@ -123,17 +135,20 @@ const getCityForecast = async function (city) {
   });
 };
 
+// This basically builds the forecast container - tried to use column-gap for white space between days like in mock-up but kept adding last element to another row - will mess with later
 var displayFiveDay = function (data) {
 
   // starting at 0 gives current day - will look into later - this works for now
   for (i=7; i<=39; i = i + 8) {
     
+    // get individual day forecasts
     let futureDate = dayjs.unix(data['list'][i]['dt']);
     let futureIconURL = 'https://openweathermap.org/img/wn/' + data['list'][i]['weather'][0]['icon'] + '@2x.png'
     let futureTemp = data['list'][i]['main']['temp'];
     let futureWind = data['list'][i]['wind']['speed'];
     let futureHumidity = data['list'][i]['main']['humidity'];
     
+    // create forecast elements
     var forecastEl = document.createElement("ul");
     var forecastDateEl = document.createElement("li");
     var forecastIconEl = document.createElement("img");
@@ -141,6 +156,7 @@ var displayFiveDay = function (data) {
     var forecastWindEl = document.createElement("li");
     var forecastHumidityEl = document.createElement("li");
 
+    // add forecast info to appropriate elements
     forecastDateEl.textContent = futureDate.format("M/D/YYYY");
     forecastIconEl.setAttribute("src", futureIconURL);
     forecastIconEl.setAttribute("class", "weatherIcon");
@@ -148,6 +164,7 @@ var displayFiveDay = function (data) {
     forecastWindEl.textContent = "Wind: " + futureWind + " MPH";
     forecastHumidityEl.textContent = "Humidity: " + futureHumidity + " %";
 
+    // build forecast element with list item data and dynamically append a list item to the ul and forecast container
     forecastEl.appendChild(forecastDateEl);
     forecastEl.appendChild(forecastIconEl);
     forecastEl.appendChild(forecastTempEl);
@@ -173,55 +190,3 @@ historyButtonsEl.addEventListener('click', buttonClickHandler);
 
 historyContainerEl.replaceChildren();
 loadCityHistory(citySearchHistory);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  /*for (var i = 0; i < repos.length; i++) {
-    var repoName = repos[i].owner.login + '/' + repos[i].name;
-
-    var repoEl = document.createElement('a');
-    repoEl.classList = 'list-item flex-row justify-space-between align-center';
-    repoEl.setAttribute('href', './single-repo.html?repo=' + repoName);
-
-    var titleEl = document.createElement('span');
-    titleEl.textContent = repoName;
-
-    repoEl.appendChild(titleEl);
-
-    var statusEl = document.createElement('span');
-    statusEl.classList = 'flex-row align-center';
-
-    if (repos[i].open_issues_count > 0) {
-      statusEl.innerHTML =
-        "<i class='fas fa-times status-icon icon-danger'></i>" + repos[i].open_issues_count + ' issue(s)';
-    } else {
-      statusEl.innerHTML = "<i class='fas fa-check-square status-icon icon-success'></i>";
-    }
-
-    repoEl.appendChild(statusEl);
-
-    forecastContainerEl.appendChild(repoEl);
-  }*/
