@@ -36,10 +36,10 @@ This website stores the last 10 searches that the user has submitted
 
 ## Screenshots
 
-!["no history"](Code\assets\screenshots\weatherDashboardNoHistory.png)
-!["first search"](Code\assets\screenshots\weatherDashboardFirstSearch.png)
-!["yes history"](Code\assets\screenshots\weatherDashboardYesHistory.png)
-!["invalid choice"](Code\assets\screenshots\weatherDashboardInvalidCity.png)
+!["no history"](Code/assets/screenshots/weatherDashboardNoHistory.png)
+!["first search"](Code/assets/screenshots/weatherDashboardFirstSearch.png)
+!["yes history"](Code/assets/screenshots/weatherDashboardYesHistory.png)
+!["invalid choice"](Code/assets/screenshots/weatherDashboardInvalidCity.png)
 
 ## Includes
 
