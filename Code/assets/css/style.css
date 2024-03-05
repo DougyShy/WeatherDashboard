@@ -12,6 +12,8 @@
 }
 
 ul {
+  display: flex-row;
+  flex-wrap: no-wrap;
   list-style-type: none;
   text-align: left;
   background-color: var(--dark);
@@ -44,7 +46,9 @@ body {
 
 .forecast-weather {
   color: white;
+  background-color: var(--primary);
   display: flex;
+  flex-wrap: no-wrap;
   justify-content: space-between;
   align-content: left;
 }

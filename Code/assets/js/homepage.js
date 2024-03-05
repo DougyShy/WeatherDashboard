@@ -14,21 +14,9 @@ var currentDate = dayjs();
 
 var citySearchHistory = [];
 if (localStorage.getItem("history") === null) {
-  console.log("EMPTY");
 } else {
   citySearchHistory = JSON.parse(localStorage.getItem("history"));
 }
-//console.log(JSON.parse(localStorage.getItem("history")));
-
-/*if (localStorage.getItem("history") !== null) {
-  console.log("NOT EMPTY");
-  citySearchHistory = JSON.parse(localStorage.getItem("history"));
-  console.log(citySearchHistory);
-} else {
-  console.log("EMPTY")
-  citySearchHistory = [];
-  localStorage.setItem("history", JSON.stringify(citySearchHistory));
-}*/
 
 var formSubmitHandler = function (event) {
   event.preventDefault();
@@ -38,10 +26,10 @@ var formSubmitHandler = function (event) {
   var cityname = cityInputEl.value.trim();
   if (cityname) {
     getCityForecast(cityname);
-
   } else {
     alert('Please enter a city name.');
   }
+  
 };
 
 var buttonClickHandler = function (event) {
@@ -55,7 +43,7 @@ var buttonClickHandler = function (event) {
 
 const loadCityHistory = function (cityHistory) {
   
-  cityHistory[0] ? cityInputEl.value = cityHistory[0] : cityInputEl.value = "San Antonio";
+  cityHistory[0] ? cityInputEl.value = cityHistory[0] : cityInputEl.value = "";
   historyContainerEl.replaceChildren();
   
   for(i = 0; i < cityHistory.length; i++) {
@@ -68,20 +56,16 @@ const loadCityHistory = function (cityHistory) {
 }
 
 async function setCityLonLat(city) {
-  console.log(city);
   var geoApiUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=' + city + '&limit=3&appid=' + app_id;
 
   response = await fetch(geoApiUrl);
-  console.log(response);
   if (response.ok) {
     data = await response.json();
-    console.log(data.length);
     if(data.length > 0) {
       
       longitude = data[0].lon;
       latitude = data[0].lat;
       
-      console.log(city);
       addCityToSearchHistory(city);
       loadCityHistory(citySearchHistory);
 
@@ -95,13 +79,11 @@ async function setCityLonLat(city) {
 const addCityToSearchHistory = function (city) {
   if (citySearchHistory.length < 10) {
     citySearchHistory.unshift(city);
-    console.log("HERE: " + citySearchHistory);
-    console.log(citySearchHistory);
   } else {
     citySearchHistory.pop();
     citySearchHistory.unshift(city);
   }
-  console.log(citySearchHistory);
+
   localStorage.setItem("history", JSON.stringify(citySearchHistory));  
 }
 
@@ -115,7 +97,6 @@ const getCityForecast = async function (city) {
   fetch(currentDayApiUrl)
     .then(function (response) {
       if (response.ok) {
-        console.log("HERE");
         response.json().then(function (data) {
           displayCurrentWeather(data);
         });
@@ -177,10 +158,8 @@ var displayFiveDay = function (data) {
 
 }
 
-// since only on day is being shown here I decided to experiment with innerHTML
+// since only one day is being shown here I decided to experiment with innerHTML
 var displayCurrentWeather = function (data) {
-  console.log("DATA: ");
-  console.log (data);
 
   const weatherIconURL = 'https://openweathermap.org/img/wn/' + data['weather'][0]['icon'] + '@2x.png'  
 
